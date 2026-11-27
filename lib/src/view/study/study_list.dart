@@ -327,7 +327,7 @@ class const _StudySubtitle({required final StudyPageItem study}) extends Statele
             ),
             const TextSpan(text: ' • '),
           ],
-          TextSpan(text: relativeDate(context.l10n, study.updatedAt)),
+          TextSpan(text: relativeDate(context.l10n, study.createdAt)),
         ],
       ),
     );

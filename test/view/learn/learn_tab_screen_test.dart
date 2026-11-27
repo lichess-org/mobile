@@ -126,6 +126,7 @@ const _hotStudiesResponse = '''
         "name": "A hot study",
         "liked": false,
         "likes": 1,
+        "createdAt": 1723731143350,
         "updatedAt": 1723817543350,
         "owner": {"name": "HeySerginho", "id": "heyserginho"},
         "chapters": ["Chapter 1"],

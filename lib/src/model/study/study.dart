@@ -157,6 +157,7 @@ sealed class const StudyPageItem._() with _$StudyPageItem {
     required String name,
     required bool liked,
     required int likes,
+    @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch) required DateTime createdAt,
     @JsonKey(fromJson: DateTime.fromMillisecondsSinceEpoch) required DateTime updatedAt,
     required LightUser? owner,
     required IList<String> topics,
