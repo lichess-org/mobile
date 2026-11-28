@@ -313,6 +313,7 @@ class const _Following(
                   return SwipeActions(
                     extentRatio: 0.3,
                     allowsFullSwipe: false,
+                    restrictSwipeToEndActions: true,
                     endActions: [
                       SwipeAction(
                         onPressed: () async {
