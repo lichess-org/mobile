@@ -5,6 +5,8 @@ import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/gestures.dart' show kLongPressTimeout;
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -25,15 +27,18 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/offline_computer/opponent_settings.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -126,26 +131,42 @@ void main() {
       expect(find.textContaining('4'), findsWidgets);
     });
 
-    testWidgets('Can play moves and move list updates', (tester) async {
+    testWidgets('Selecting a move shows that position and highlights the move', (tester) async {
       await initOfflineComputerGame(tester);
-
-      // Initially no moves in the move list
       expect(find.byType(InlineMoveItem), findsNothing);
 
       await playMove(tester, 'e2', 'e4');
-      await tester.pump(const Duration(milliseconds: 200));
       await tester.pumpAndSettle();
+      expect(find.byType(InlineMoveItem), findsNWidgets(2));
 
-      // Move list should now show moves
-      expect(find.byType(InlineMoveItem), findsWidgets);
-      expect(find.text('e4'), findsOneWidget);
+      await tester.tap(find.text('e4'));
+      await tester.pump();
+      final e4 = find.ancestor(of: find.text('e4'), matching: find.byType(InlineMoveItem));
+      expect(tester.widget<InlineMoveItem>(e4).current, isTrue);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.b8, Piece.blackKnight), isTrue);
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
 
-      // Wait for engine response
-      await tester.pump(const Duration(milliseconds: 200));
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+      expect(tester.widget<InlineMoveItem>(e4).current, isFalse);
+      expect(getBoardLastMove(tester), isNull);
+      final board = tester.getRect(find.byType(Chessboard));
+      await tester.tapAt(squareOffset(Square.g1, board));
+      await tester.pump();
+      expect(getBoardValidMoves(tester), isEmpty);
+      await tester.tapAt(squareOffset(Square.f3, board));
+      await tester.pump();
+      expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+      expect(find.byType(InlineMoveItem), findsNWidgets(2));
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await pumpReplayTransition(tester);
+      await tester.tap(find.text('Return to latest'));
       await tester.pumpAndSettle();
-
-      // Engine should have responded - at least 2 moves now
-      expect(find.byType(InlineMoveItem), findsAtLeast(2));
+      await playMove(tester, 'g1', 'f3');
+      await tester.pumpAndSettle();
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
     });
 
     testWidgets('Hints run on the analysis engine, beside the resident opponent', (tester) async {
@@ -267,7 +288,9 @@ void main() {
       );
     });
 
-    testWidgets('Can play drop moves in crazyhouse', (tester) async {
+    testWidgets('Crazyhouse pockets follow the selected move and reject drops in replay', (
+      tester,
+    ) async {
       await initOfflineComputerGame(
         tester,
         variant: Variant.crazyhouse,
@@ -275,29 +298,139 @@ void main() {
       );
 
       expect(find.byType(PocketsMenu), findsNWidgets(2));
+      final whitePawnCount = find.descendant(
+        of: find.byKey(const ValueKey('pocket-whitepawn')),
+        matching: find.text('1'),
+      );
+      expect(whitePawnCount, findsOneWidget);
 
       await playDropMove(tester, Side.white, Role.pawn, 'c4');
       await tester.pump(const Duration(milliseconds: 200));
       await tester.pumpAndSettle();
 
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
+      expect(whitePawnCount, findsNothing);
+
+      final controller = offlineGameContainer(tester)
+          .read(offlineComputerGameControllerProvider.notifier);
+      controller.cursorAt(0);
+      await tester.pump();
+      expect(whitePawnCount, findsOneWidget);
+      final board = tester.getRect(find.byType(Chessboard));
+      final pocket = tester.getCenter(find.byKey(const ValueKey('pocket-whitepawn')));
+      await tester.dragFrom(pocket, squareOffset(Square.c4, board) - pocket);
+      await tester.pump();
+      expect(getBoardPieces(tester)[Square.c4], isNull);
+      expect(whitePawnCount, findsOneWidget);
     });
 
-    testWidgets('Engine responds after player move', (tester) async {
-      await initOfflineComputerGame(tester);
+    testWidgets(
+      'During replay, the engine searches the live position and the controller appends its reply once',
+      (tester) async {
+        final engine = _ReplayTestEngine(
+          holdSearch: (session) => session.spec.label == 'variant' && session.position?.ply == 1,
+        );
+        fakeEngine = engine;
+        await initOfflineComputerGame(tester, boardPrefs: BoardPrefs.defaults);
+        final container = offlineGameContainer(tester);
+        final controller = container.read(offlineComputerGameControllerProvider.notifier);
+        final animation = container.read(boardPreferencesProvider).pieceAnimationDuration;
+        expect(animation, greaterThan(Duration.zero));
 
-      // Play a move to trigger engine thinking
+        await playMove(tester, 'e2', 'e4');
+        expect(container.read(offlineComputerGameControllerProvider).isEngineThinking, isFalse);
+        controller.goBack();
+        await tester.pump(animation + const Duration(milliseconds: 50));
+
+        final opponent = engine.sessions.singleWhere((session) => session.spec.label == 'variant');
+        expect(opponent.position, Chess.initial.play(Move.parse('e2e4')!));
+        expect(container.read(offlineComputerGameControllerProvider).isEngineThinking, isTrue);
+        final next = find.byIcon(CupertinoIcons.chevron_forward);
+        expect(toolbarButton(tester, next).blink, isFalse);
+        await tester.tap(find.byIcon(Icons.menu));
+        await tester.pumpAndSettle();
+        opponent.emit('bestmove e7e5');
+        await tester.pump();
+        await tester.pump(animation + const Duration(milliseconds: 50));
+        expect(toolbarButton(tester, next).blink, isTrue);
+
+        final state = container.read(offlineComputerGameControllerProvider);
+        expect(state.moves, ['e4', 'e5']);
+        expect(state.stepCursor, 0);
+        expect(state.isEngineThinking, isFalse);
+        expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
+        expect(getBoardLastMove(tester), isNull);
+
+        await tester.tap(find.text('Return to latest'));
+        await tester.pumpAndSettle();
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+        expect(toolbarButton(tester, next).blink, isFalse);
+        await playMove(tester, 'g1', 'f3');
+        await tester.pump(animation + const Duration(milliseconds: 50));
+        await tester.pumpAndSettle();
+        expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+      },
+    );
+
+    testWidgets('Practice evaluation records its verdict on the live move during replay', (
+      tester,
+    ) async {
+      final engine = _ReplayTestEngine(
+        holdSearch: (session) =>
+            session.spec.label == 'light' &&
+            (session.position?.ply == 0 || session.position?.ply == 2),
+      );
+      fakeEngine = engine;
+      await initPracticeModeGame(tester);
+      final container = offlineGameContainer(tester);
+      final controller = container.read(offlineComputerGameControllerProvider.notifier);
+
       await playMove(tester, 'e2', 'e4');
+      expect(container.read(offlineComputerGameControllerProvider).isEvaluatingMove, isTrue);
+      controller.goBack();
+      await tester.pump();
+      expect(find.textContaining('Evaluating your move'), findsNothing);
 
-      // Wait for engine to respond
+      final evaluator = engine.sessions.singleWhere((session) => session.spec.label == 'light');
+      evaluator.emit('info depth 18 multipv 1 score cp 30 nodes 50000 time 1000 pv d2d4');
+      evaluator.emit('info depth 18 multipv 2 score cp 25 nodes 50000 time 1000 pv e2e4');
+      evaluator.emit('bestmove d2d4');
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
       await tester.pump(const Duration(milliseconds: 200));
+      await tester.pump();
+
+      final state = container.read(offlineComputerGameControllerProvider);
+      expect(state.isEvaluatingMove, isFalse);
+      expect(state.stepCursor, 0);
+      expect(state.game.steps.first.computerAnalysis?.practiceComment, isNull);
+      final comment = state.game.steps[1].computerAnalysis?.practiceComment;
+      expect(comment?.verdict, MoveVerdict.goodMove);
+      expect(comment?.moveSuggestion?.san, 'd4');
+      expect(find.text('Good move'), findsNothing);
+
+      controller.cursorAt(state.liveStepIndex);
       await tester.pumpAndSettle();
+      expect(find.text('Good move'), findsOneWidget);
 
-      // After engine finishes, thinking indicator should not be visible
-      expect(find.byType(CircularProgressIndicator), findsNothing);
+      await playMove(tester, 'g1', 'f3');
+      expect(container.read(offlineComputerGameControllerProvider).isEvaluatingMove, isTrue);
+      controller.goBack();
+      await tester.pump();
+      expect(find.text('Good move'), findsNothing);
 
-      // Engine should have responded - move list should have at least 2 moves
-      expect(find.byType(InlineMoveItem), findsAtLeast(2));
+      controller.goForward();
+      await tester.pumpAndSettle();
+      final verdict = find.text('Good move');
+      expect(verdict, findsOneWidget);
+      final opacity = tester.widget<AnimatedOpacity>(
+        find.ancestor(of: verdict, matching: find.byType(AnimatedOpacity)).first,
+      );
+      expect(opacity.opacity, 0.5);
+
+      evaluator.emit('info depth 18 multipv 1 score cp 30 nodes 50000 time 1000 pv g1f3');
+      evaluator.emit('bestmove g1f3');
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+      await tester.pumpAndSettle();
     });
 
     testWidgets('Takeback button removes moves and updates UI', (tester) async {
@@ -314,13 +447,330 @@ void main() {
       final movesBefore = tester.widgetList(find.byType(InlineMoveItem)).length;
       expect(movesBefore, greaterThanOrEqualTo(1));
 
-      // Tap takeback button
+      final container = offlineGameContainer(tester);
+      final controller = container.read(offlineComputerGameControllerProvider.notifier);
+      final live = container.read(offlineComputerGameControllerProvider);
+      controller.cursorAt(0);
+      await tester.pump();
+      controller.takeback();
+      controller.makeMove(Move.parse('d2d4')!);
+      controller.hint();
+      controller.toggleSuggestedMove(const NormalMove(from: Square.d2, to: Square.d4));
+      final replay = container.read(offlineComputerGameControllerProvider);
+      expect(replay.game, live.game);
+      expect(replay.hintMove, isNull);
+      expect(replay.showingSuggestedMove, isNull);
+
+      controller.cursorAt(live.liveStepIndex);
+      await tester.pumpAndSettle();
       await tester.tap(find.byIcon(CupertinoIcons.arrow_uturn_left));
       await tester.pumpAndSettle();
 
       // Move count should decrease
       final movesAfter = tester.widgetList(find.byType(InlineMoveItem)).length;
       expect(movesAfter, lessThan(movesBefore));
+    });
+
+    testWidgets('Replay navigation works by touch and semantics with the move list hidden', (
+      tester,
+    ) async {
+      await initOfflineComputerGame(
+        tester,
+        boardPrefs: BoardPrefs.defaults.copyWith(moveListDisplay: false, pieceAnimation: false),
+      );
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+      expect(find.byType(MoveList), findsNothing);
+      final liveMove = getBoardLastMove(tester);
+      expect(liveMove, isNotNull);
+
+      final previous = find.byIcon(CupertinoIcons.chevron_back);
+      final next = find.byIcon(CupertinoIcons.chevron_forward);
+      void performSemanticTap(String label) {
+        final node = tester.getSemantics(find.bySemanticsLabel(label));
+        expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
+        node.owner!.performAction(node.id, SemanticsAction.tap);
+      }
+
+      expect(toolbarButton(tester, next).enabled, isFalse);
+      expect(
+        tester
+            .getSemantics(find.bySemanticsLabel('Next'))
+            .getSemanticsData()
+            .hasAction(SemanticsAction.tap),
+        isFalse,
+      );
+      performSemanticTap('Previous move');
+      await tester.pump();
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+      await tester.tap(previous);
+      await tester.pump();
+      expect(getBoardLastMove(tester), isNull);
+      expect(toolbarButton(tester, previous).enabled, isFalse);
+      performSemanticTap('Next');
+      await tester.pump();
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+      await tester.tap(next);
+      await tester.pumpAndSettle();
+      expect(getBoardLastMove(tester), liveMove);
+      expect(toolbarButton(tester, next).enabled, isFalse);
+      await playMove(tester, 'g1', 'f3');
+      await tester.pumpAndSettle();
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+    }, variant: kPlatformVariant);
+
+    testWidgets('Holding the replay arrows stops on release and at either endpoint', (
+      tester,
+    ) async {
+      await initOfflineComputerGame(tester);
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+      await playMove(tester, 'g1', 'f3');
+      await tester.pumpAndSettle();
+
+      final container = offlineGameContainer(tester);
+      OfflineComputerGameState gameState() => container.read(offlineComputerGameControllerProvider);
+      final liveIndex = gameState().liveStepIndex;
+      final previous = find.byIcon(CupertinoIcons.chevron_back);
+      final next = find.byIcon(CupertinoIcons.chevron_forward);
+
+      final shortHold = await tester.startGesture(tester.getCenter(previous));
+      await tester.pump(kLongPressTimeout);
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(gameState().stepCursor, liveIndex - 2);
+      await shortHold.up();
+      await tester.pump(const Duration(seconds: 1));
+      expect(gameState().stepCursor, liveIndex - 2);
+
+      for (final (button, endpoint) in [(previous, 0), (next, liveIndex)]) {
+        final hold = await tester.startGesture(tester.getCenter(button));
+        await tester.pump(kLongPressTimeout);
+        for (var step = 0; step < liveIndex; step++) {
+          await tester.pump(const Duration(milliseconds: 200));
+        }
+        expect(gameState().stepCursor, endpoint);
+        expect(toolbarButton(tester, button).enabled, isFalse);
+        await hold.up();
+        await tester.pump(const Duration(seconds: 1));
+        expect(gameState().stepCursor, endpoint);
+      }
+
+      final (navigation, _, _) = toolbarCutoffs(tester);
+      final hold = await tester.startGesture(tester.getCenter(previous));
+      await tester.pump(kLongPressTimeout);
+      expect(gameState().stepCursor, liveIndex - 1);
+      await resizeOfflineGame(tester, Size(navigation - 1, kTestSurfaceSize.height), settle: false);
+      expect(previous, findsNothing);
+      await tester.pump(const Duration(seconds: 1));
+      expect(gameState().stepCursor, liveIndex - 1);
+      await hold.up();
+    }, variant: kPlatformVariant);
+
+    testWidgets(
+      'As the toolbar narrows, it drops Takeback and Hint first, then the Resign shortcut, then navigation',
+      (tester) async {
+        await initOfflineComputerGame(tester);
+        await playMove(tester, 'e2', 'e4');
+        await tester.pumpAndSettle();
+
+        final (navigation, resign, full) = toolbarCutoffs(tester);
+        const assistIcons = [CupertinoIcons.arrow_uturn_left, CupertinoIcons.lightbulb];
+        const navigationIcons = [CupertinoIcons.chevron_back, CupertinoIcons.chevron_forward];
+        const resignIcon = [CupertinoIcons.flag];
+        const allIcons = [...assistIcons, ...navigationIcons, ...resignIcon];
+
+        void expectShortcuts(List<IconData> visible) {
+          for (final icon in allIcons) {
+            final finder = find.byIcon(icon);
+            if (visible.contains(icon)) {
+              expect(finder.hitTestable(), findsOneWidget);
+            } else {
+              expect(finder, findsNothing);
+            }
+          }
+        }
+
+        final widths = {
+          full: allIcons,
+          full - 1: [...navigationIcons, ...resignIcon],
+          resign: [...navigationIcons, ...resignIcon],
+          resign - 1: navigationIcons,
+          navigation: navigationIcons,
+          navigation - 1: <IconData>[],
+        };
+        for (final entry in widths.entries) {
+          await resizeOfflineGame(tester, Size(entry.key, kTestSurfaceSize.height));
+          expectShortcuts(entry.value);
+        }
+
+        const landscape = Size(820, 700);
+        await resizeOfflineGame(tester, landscape);
+        expect(find.byType(StackedMoveItem), findsNWidgets(2));
+        final barWidth = tester.getSize(find.byType(BottomBar)).width;
+        expect(landscape.width, greaterThan(full));
+        expect(barWidth, inInclusiveRange(resign, full - 1));
+        expectShortcuts([...navigationIcons, ...resignIcon]);
+      },
+      variant: kPlatformVariant,
+    );
+
+    testWidgets('Menu provides the shortcuts that do not fit and keeps the Resign action', (
+      tester,
+    ) async {
+      await initOfflineComputerGame(tester);
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+      final liveMove = getBoardLastMove(tester);
+      final (navigation, resign, full) = toolbarCutoffs(tester);
+      final menu = find.byIcon(Icons.menu);
+
+      await resizeOfflineGame(tester, Size(full - 1, kTestSurfaceSize.height));
+      await tester.tap(menu);
+      await tester.pumpAndSettle();
+      expect(find.text('Takeback'), findsOneWidget);
+      expect(find.text('Get a hint'), findsOneWidget);
+      expect(find.text('Resign'), findsOneWidget);
+      expect(find.text('Previous move'), findsNothing);
+      await tester.tapAt(Offset.zero);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(CupertinoIcons.flag));
+      await tester.pumpAndSettle();
+      expect(find.text('Are you sure?'), findsOneWidget);
+      await tester.tap(find.text('No'));
+      await tester.pumpAndSettle();
+
+      await resizeOfflineGame(tester, Size(resign - 1, kTestSurfaceSize.height));
+      await tester.tap(menu);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Resign'));
+      await tester.pumpAndSettle();
+      expect(find.text('Are you sure?'), findsOneWidget);
+      await tester.tap(find.text('No'));
+      await tester.pumpAndSettle();
+
+      await resizeOfflineGame(tester, Size(navigation - 1, kTestSurfaceSize.height));
+      await tester.tap(menu);
+      await tester.pumpAndSettle();
+      expect(find.text('Next'), findsNothing);
+      await tester.tap(find.text('Previous move'));
+      await tester.pumpAndSettle();
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+      await tester.tap(menu);
+      await tester.pumpAndSettle();
+      expect(find.text('Takeback'), findsNothing);
+      expect(find.text('Get a hint'), findsNothing);
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(getBoardLastMove(tester), liveMove);
+    }, variant: kPlatformVariant);
+
+    testWidgets('Return to latest still works when an open Menu outlives the tablet toolbar', (
+      tester,
+    ) async {
+      await initOfflineComputerGame(tester);
+      await resizeOfflineGame(tester, const Size(700, 950));
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+      final liveMove = getBoardLastMove(tester);
+      await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
+      await tester.pump();
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+
+      final portraitToolbar = tester.element(find.byType(BottomBar));
+      await tester.tap(find.byIcon(Icons.menu));
+      await pumpReplayTransition(tester);
+      await resizeOfflineGame(tester, const Size(950, 700), settle: false);
+      expect(portraitToolbar.mounted, isFalse);
+
+      await tester.tap(find.text('Return to latest'));
+      await tester.pumpAndSettle();
+      expect(getBoardLastMove(tester), liveMove);
+    }, variant: kPlatformVariant);
+
+    for (final (label, variant, fen) in [
+      ('analysis times out', Variant.standard, null),
+      (
+        'the evaluation only suggests a drop',
+        Variant.crazyhouse,
+        'r7/8/8/8/8/8/2k5/K7[N] w - - 0 12',
+      ),
+    ]) {
+      testWidgets('Hint is unavailable when $label', (tester) async {
+        final engine = _ReplayTestEngine(holdSearch: (_) => true);
+        fakeEngine = engine;
+        await initOfflineComputerGame(tester, variant: variant, fen: fen);
+        if (fen != null) {
+          final session = engine.sessions.single;
+          session.emit('info depth 18 multipv 1 score cp 30 nodes 50000 time 1000 pv N@a2');
+          session.emit('bestmove N@a2');
+        }
+        await tester.pump(
+          kPracticeMaxSearchTime + kPracticeEngineStartWait + const Duration(seconds: 2),
+        );
+        await tester.pumpAndSettle();
+
+        final state = offlineGameContainer(tester).read(offlineComputerGameControllerProvider);
+        expect(state.isLoadingHint, isFalse);
+        if (fen != null) {
+          expect(
+            state.currentPosition.legalMoves.values.every((squares) => squares.isEmpty),
+            isTrue,
+          );
+          expect(state.currentAnalysis?.bestMoves?.single.move, isA<DropMove>());
+        } else {
+          expect(state.currentAnalysis, isNull);
+        }
+        expect(toolbarButton(tester, find.byIcon(CupertinoIcons.lightbulb)).enabled, isFalse);
+
+        final (_, _, full) = toolbarCutoffs(tester);
+        await resizeOfflineGame(tester, Size(full - 1, kTestSurfaceSize.height));
+        await tester.tap(find.byIcon(Icons.menu));
+        await tester.pumpAndSettle();
+        expect(find.text('Get a hint'), findsNothing);
+      });
+    }
+
+    testWidgets('Returning to live after an Atomic capture does not repeat the explosion', (
+      tester,
+    ) async {
+      const fen = '7k/8/8/3p4/4P3/8/P7/K7 w - - 0 2';
+      final engine = _ReplayTestEngine(holdSearch: (session) => session.position?.ply == 3);
+      fakeEngine = engine;
+      await initOfflineComputerGame(tester, variant: Variant.atomic, fen: fen);
+      final container = offlineGameContainer(tester);
+      final controller = container.read(offlineComputerGameControllerProvider.notifier);
+
+      final board = tester.widget<Chessboard>(find.byType(Chessboard)).controller;
+      await playMove(tester, 'e4', 'd5');
+      expect(tester.hasRunningAnimations, isTrue);
+      await tester.pumpAndSettle();
+      expect(getBoardLastMove(tester), Move.parse('e4d5'));
+      expect(getBoardPieces(tester)[Square.d5], isNull);
+      final materialScore = find.descendant(
+        of: find.byType(MaterialDifferenceDisplay),
+        matching: find.text('+1'),
+      );
+      expect(materialScore, findsOneWidget);
+
+      controller.goBack();
+      await tester.pumpAndSettle();
+      expect(materialScore, findsNothing);
+      expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
+      expect(getBoardLastMove(tester), isNull);
+
+      var updates = 0;
+      void recordUpdate() => updates++;
+      board.addListener(recordUpdate);
+      controller.goForward();
+      await tester.pump();
+      board.removeListener(recordUpdate);
+      expect(getBoardLastMove(tester), Move.parse('e4d5'));
+      expect(materialScore, findsOneWidget);
+      expect(updates, 1, reason: 'an explosion would notify the board again');
+
+      engine.sessions.single.emit('bestmove h8g8');
+      await tester.pumpAndSettle();
     });
 
     testWidgets('Resign button shows confirmation dialog', (tester) async {
@@ -346,36 +796,49 @@ void main() {
       expect(find.text('No'), findsOneWidget);
     });
 
-    testWidgets('Resign ends game and shows result dialog', (tester) async {
-      await initOfflineComputerGame(tester);
+    testWidgets(
+      'Resigning during replay keeps the selection; result Analysis opens at the final move',
+      (tester) async {
+        await initOfflineComputerGame(tester);
 
-      // Play moves to make the game resignable
-      await playMove(tester, 'e2', 'e4');
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pumpAndSettle();
+        // Play moves to make the game resignable
+        await playMove(tester, 'e2', 'e4');
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.pumpAndSettle();
 
-      await playMove(tester, 'd2', 'd4');
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pumpAndSettle();
+        await playMove(tester, 'd2', 'd4');
+        await tester.pump(const Duration(milliseconds: 300));
+        await tester.pumpAndSettle();
 
-      // Tap resign button
-      await tester.tap(find.byIcon(CupertinoIcons.flag));
-      await tester.pumpAndSettle();
+        final container = offlineGameContainer(tester);
+        final live = container.read(offlineComputerGameControllerProvider);
+        await tester.tap(find.text('e4'));
+        await tester.pump();
 
-      // Confirm resignation
-      await tester.tap(find.text('Yes'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(CupertinoIcons.flag));
+        await pumpReplayTransition(tester);
 
-      // Wait for result dialog timer (500ms)
-      await tester.pump(const Duration(milliseconds: 600));
-      await tester.pumpAndSettle();
+        // Confirm resignation
+        await tester.tap(find.text('Yes'));
+        await tester.pumpAndSettle();
 
-      // Verify result dialog is shown
-      expect(find.text('Game Over'), findsOneWidget);
-      expect(find.text('White resigned'), findsOneWidget);
-      expect(find.text('Close'), findsOneWidget);
-      expect(find.text('New game'), findsWidgets);
-    });
+        // Wait for result dialog timer (500ms)
+        await tester.pump(const Duration(milliseconds: 600));
+        await tester.pumpAndSettle();
+
+        // Verify result dialog is shown
+        expect(find.text('Game Over'), findsOneWidget);
+        expect(find.text('White resigned'), findsOneWidget);
+        expect(find.text('Close'), findsOneWidget);
+        expect(find.text('New game'), findsWidgets);
+        expect(container.read(offlineComputerGameControllerProvider).replayCursor, 1);
+        expect(toolbarButton(tester, find.byIcon(CupertinoIcons.chevron_forward)).blink, isFalse);
+
+        await tester.tap(find.text('Analysis board'));
+        await tester.pumpAndSettle();
+        expect(getBoardLastMove(tester), live.game.steps.last.sanMove?.move);
+      },
+    );
 
     testWidgets('New game option in menu opens bottom sheet', (tester) async {
       await initOfflineComputerGame(tester);
@@ -519,15 +982,24 @@ void main() {
       );
       opponentEngine.commands.clear();
 
+      final container = offlineGameContainer(tester);
+      container.read(offlineComputerGameControllerProvider.notifier).goBack();
+      await tester.pump();
+      expect(container.read(offlineComputerGameControllerProvider).isReplaying, isTrue);
+
       await tester.tap(find.byIcon(Icons.menu));
-      await tester.pumpAndSettle();
+      await pumpReplayTransition(tester);
       await tester.tap(find.text('New game'));
-      await tester.pumpAndSettle();
+      await pumpReplayTransition(tester);
       // The side picker already holds the side of the game just played.
       await tester.ensureVisible(find.text('Play'));
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
+      final newGame = container.read(offlineComputerGameControllerProvider);
+      expect(newGame.isReplaying, isFalse);
+      expect(newGame.stepCursor, 0);
+      expect(getBoardLastMove(tester), isNull);
       await playMove(tester, 'd2', 'd4');
       await tester.pump(const Duration(milliseconds: 200));
       await tester.pumpAndSettle();
@@ -730,107 +1202,87 @@ void main() {
       expect(hintWidget.onTap, isNull);
     });
 
-    testWidgets('Loading saved game restores position and engine identity in analysis', (
-      tester,
-    ) async {
-      final gameStorage = MockOfflineComputerGameStorage();
+    testWidgets(
+      'Menu Analysis opens at the viewed move and includes a reply received while Menu was open',
+      (tester) async {
+        final engine = _ReplayTestEngine(
+          holdSearch: (session) => session.spec.label == 'variant' && session.position?.ply == 3,
+        );
+        fakeEngine = engine;
+        final gameStorage = MockOfflineComputerGameStorage();
 
-      // Return a saved game with moves already played (e4, e5)
-      when(() => gameStorage.fetchGame()).thenAnswer(
-        (_) async => SavedOfflineComputerGame(
-          game: OfflineComputerGame(
-            id: const StringId('test-game-id'),
-            steps: [
-              const GameStep(position: Chess.initial),
-              GameStep(
-                position: Position.setupPosition(
-                  Rule.chess,
-                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
-                ),
-                sanMove: SanMove('e4', Move.parse('e2e4')!),
-              ),
-              GameStep(
-                position: Position.setupPosition(
-                  Rule.chess,
-                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
-                ),
-                sanMove: SanMove('e5', Move.parse('e7e5')!),
-              ),
-            ].lock,
-            meta: GameMeta(
-              createdAt: DateTime.now(),
-              rated: false,
-              variant: Variant.standard,
-              speed: Speed.classical,
-              perf: Perf.classical,
-            ),
-            initialFen: kInitialFEN,
-            status: GameStatus.started,
-            playerSide: Side.white,
-            opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
-            humanPlayer: const Player(onGame: true),
-            enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
-          ),
-        ),
-      );
-      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+        final saved = _savedGameAfterE4E5();
+        when(() => gameStorage.fetchGame()).thenAnswer((_) async => saved);
+        when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Builder(
-          builder: (context) => Scaffold(
-            appBar: AppBar(title: const Text('Test Screen')),
-            body: FilledButton(
-              child: const Text('Go to game'),
-              onPressed: () =>
-                  Navigator.of(context)
-                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Builder(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: const Text('Test Screen')),
+              body: FilledButton(
+                child: const Text('Go to game'),
+                onPressed: () =>
+                    Navigator.of(context)
+                        .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              ),
             ),
           ),
-        ),
-        overrides: {
-          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
-            (_) => gameStorage,
-          ),
-        },
-      );
-      await tester.pumpWidget(app);
+          overrides: {
+            offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+              (_) => gameStorage,
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
 
-      await tester.tap(find.text('Go to game'));
+        await tester.tap(find.text('Go to game'));
 
-      // Wait for saved game to be loaded
-      await tester.pumpAndSettle();
+        // Wait for saved game to be loaded
+        await tester.pumpAndSettle();
 
-      verify(() => gameStorage.fetchGame()).called(1);
+        verify(() => gameStorage.fetchGame()).called(1);
 
-      // Should not show new game dialog if we loaded a saved game
-      expect(find.text('Game setup'), findsNothing);
+        // Should not show new game dialog if we loaded a saved game
+        expect(find.text('Game setup'), findsNothing);
 
-      // Should load the game's current position, i.e. e4 and e5 were played
-      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
-      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+        // Should load the game's current position, i.e. e4 and e5 were played
+        expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+        expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
-      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
-      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+        expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
-      // Move list should show the played moves
-      expect(find.text('e4'), findsOneWidget);
-      expect(find.text('e5'), findsOneWidget);
+        // Move list should show the played moves
+        expect(find.text('e4'), findsOneWidget);
+        expect(find.text('e5'), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.menu));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Analysis board'));
-      await tester.pumpAndSettle();
+        await playMove(tester, 'g1', 'f3');
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('e4'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byIcon(Icons.menu));
+        await tester.pumpAndSettle();
+        final opponent = engine.sessions.singleWhere((session) => session.spec.label == 'variant');
+        opponent.emit('bestmove b8c6');
+        await tester.pump();
+        await tester.tap(find.text('Analysis board'));
+        await pumpReplayTransition(tester);
 
-      final engineHeader = find.byWidgetPredicate(
-        (widget) => widget is PgnPlayerWidget && widget.player.side == .black,
-      );
-      expect(
-        find.descendant(of: engineHeader, matching: find.text('Stockfish level 1')),
-        findsOneWidget,
-      );
-      expect(find.descendant(of: engineHeader, matching: find.text('BOT')), findsOneWidget);
-    });
+        final analysis = tester.widget<AnalysisScreen>(find.byType(AnalysisScreen));
+        expect(analysis.options.initialMoveCursor, 1);
+        expect(find.text('Nc6'), findsWidgets);
+        expect(getBoardLastMove(tester), Move.parse('e2e4'));
+        final engineHeader = find.byWidgetPredicate(
+          (widget) => widget is PgnPlayerWidget && widget.player.side == .black,
+        );
+        expect(
+          find.descendant(of: engineHeader, matching: find.text('Stockfish level 1')),
+          findsOneWidget,
+        );
+        expect(find.descendant(of: engineHeader, matching: find.text('BOT')), findsOneWidget);
+      },
+    );
 
     testWidgets('Last move is highlighted when loading a saved game', (tester) async {
       // Regression test: interactive boards read the last move from
@@ -840,43 +1292,8 @@ void main() {
 
       // Saved game after 1.e4 e5 — it's white's turn (the player's), so the
       // engine does not move and the last move stays e7e5.
-      when(() => gameStorage.fetchGame()).thenAnswer(
-        (_) async => SavedOfflineComputerGame(
-          game: OfflineComputerGame(
-            id: const StringId('test-game-id'),
-            steps: [
-              const GameStep(position: Chess.initial),
-              GameStep(
-                position: Position.setupPosition(
-                  Rule.chess,
-                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
-                ),
-                sanMove: SanMove('e4', Move.parse('e2e4')!),
-              ),
-              GameStep(
-                position: Position.setupPosition(
-                  Rule.chess,
-                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
-                ),
-                sanMove: SanMove('e5', Move.parse('e7e5')!),
-              ),
-            ].lock,
-            meta: GameMeta(
-              createdAt: DateTime.now(),
-              rated: false,
-              variant: Variant.standard,
-              speed: Speed.classical,
-              perf: Perf.classical,
-            ),
-            initialFen: kInitialFEN,
-            status: GameStatus.started,
-            playerSide: Side.white,
-            opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
-            humanPlayer: const Player(onGame: true),
-            enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
-          ),
-        ),
-      );
+      final saved = _savedGameAfterE4E5();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => saved);
       when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
       final app = await makeTestProviderScopeApp(
@@ -891,7 +1308,19 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // The last move (e7e5) must be highlighted on the restored board.
+      expect(getBoardLastMove(tester), Move.parse('e7e5'));
+
+      final container = offlineGameContainer(tester);
+      final controller = container.read(offlineComputerGameControllerProvider.notifier);
+      controller.goBack();
+      await tester.pump();
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+
+      controller.loadGame(saved);
+      await tester.pumpAndSettle();
+      final loaded = container.read(offlineComputerGameControllerProvider);
+      expect(loaded.stepCursor, 2);
+      expect(loaded.isReplaying, isFalse);
       expect(getBoardLastMove(tester), Move.parse('e7e5'));
     });
 
@@ -1345,15 +1774,45 @@ void main() {
       expect(activeClock(tester), Side.white);
       expect(findEngineClock(tester).timeLeft, greaterThan(time));
       expect(findPlayerClock(tester).timeLeft, lessThan(time));
+
+      final playerTime = findPlayerClock(tester).timeLeft;
+      final engineTime = findEngineClock(tester).timeLeft;
+      final container = offlineGameContainer(tester);
+      final controller = container.read(offlineComputerGameControllerProvider.notifier);
+      controller.goBack();
+      await tester.pump(const Duration(milliseconds: 100));
+      final replay = container.read(offlineComputerGameControllerProvider);
+      expect(replay.viewedStep.position.turn, Side.black);
+      expect(toolbarButton(tester, find.byIcon(CupertinoIcons.chevron_forward)).blink, isTrue);
+      expect(activeClock(tester), Side.white);
+      expect(findPlayerClock(tester).timeLeft, lessThanOrEqualTo(playerTime));
+      expect(findEngineClock(tester).timeLeft, engineTime);
+
+      controller.suspendClock();
+      await tester.pump();
+      expect(activeClock(tester), isNull);
+      controller.resumeClock();
+      await tester.pump();
+      expect(activeClock(tester), Side.white);
+      expect(findEngineClock(tester).timeLeft, engineTime);
     });
 
-    testWidgets('the game ends when the player runs out of time', (tester) async {
+    testWidgets('Menu Analysis cannot open a new standard game after the previous game flags', (
+      tester,
+    ) async {
       const time = Duration(seconds: 1);
       await initTimedOfflineComputerGame(tester, TimeIncrement(time.inSeconds, 0));
 
       await playMove(tester, 'e2', 'e4');
       await tester.pump(const Duration(milliseconds: 200));
       await tester.pumpAndSettle();
+
+      final container = offlineGameContainer(tester);
+      final originalGame = container.read(offlineComputerGameControllerProvider).game;
+      expect(originalGame.casual, isTrue);
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      expect(find.text('Analysis board'), findsOneWidget);
 
       // The clock measures system time internally, so we need to actually sleep in order
       // for the clock to reach 0, instead of using tester.pump()
@@ -1363,6 +1822,26 @@ void main() {
 
       expect(find.text('White ran out of time'), findsOneWidget);
       expect(activeClock(tester), null);
+      final result = find.byType(OfflineComputerGameResultDialog);
+      await tester.tap(find.descendant(of: result, matching: find.text('New game')));
+      await tester.pumpAndSettle();
+      final casual = find.descendant(
+        of: find.ancestor(of: find.text('Casual'), matching: find.byType(SwitchSettingTile)),
+        matching: find.byType(Switch),
+      );
+      await tester.ensureVisible(casual);
+      await tester.tap(casual);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+      final replacement = container.read(offlineComputerGameControllerProvider).game;
+      expect(replacement.id, isNot(originalGame.id));
+      expect(replacement.casual, isFalse);
+      expect(replacement.playable, isTrue);
+
+      await tester.tap(find.text('Analysis board'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AnalysisScreen), findsNothing);
     });
 
     testWidgets('practice mode is played without a clock', (tester) async {
@@ -2275,7 +2754,7 @@ OfflineComputerGameState _stateWithPracticeComment(PracticeComment comment) {
     practiceMode: true,
     casual: true,
   );
-  return OfflineComputerGameState(game: game, stepCursor: 1);
+  return OfflineComputerGameState(game: game);
 }
 
 /// Builds a finished game state (checkmate) with practice mode on.
@@ -2309,7 +2788,7 @@ OfflineComputerGameState _stateGameFinished() {
     practiceMode: true,
     casual: true,
   );
-  return OfflineComputerGameState(game: game, stepCursor: 1);
+  return OfflineComputerGameState(game: game);
 }
 
 /// Builds a game state where it is the player's (white's) turn.
@@ -2336,7 +2815,7 @@ OfflineComputerGameState _statePlayerTurn({ComputerAnalysis? analysis}) {
     practiceMode: true,
     casual: true,
   );
-  return OfflineComputerGameState(game: game, stepCursor: 0);
+  return OfflineComputerGameState(game: game);
 }
 
 /// Builds a state where the player has just moved and evaluation is in progress.
@@ -2376,7 +2855,72 @@ OfflineComputerGameState _stateEvaluatingMove() {
     practiceMode: true,
     casual: true,
   );
-  return OfflineComputerGameState(game: game, stepCursor: 2, isEvaluatingMove: true);
+  return OfflineComputerGameState(game: game, isEvaluatingMove: true);
+}
+
+SavedOfflineComputerGame _savedGameAfterE4E5() {
+  const e4 = NormalMove(from: Square.e2, to: Square.e4);
+  const e5 = NormalMove(from: Square.e7, to: Square.e5);
+  final afterE4 = Chess.initial.play(e4);
+  const opponent = StockfishOpponentSpec(StockfishLevel.level1);
+  return SavedOfflineComputerGame(
+    game: OfflineComputerGame(
+      id: const StringId('test-game-id'),
+      steps: [
+        const GameStep(position: Chess.initial),
+        GameStep(position: afterE4, sanMove: const SanMove('e4', e4)),
+        GameStep(position: afterE4.play(e5), sanMove: const SanMove('e5', e5)),
+      ].lock,
+      meta: GameMeta(
+        createdAt: DateTime.now(),
+        rated: false,
+        variant: Variant.standard,
+        speed: Speed.classical,
+        perf: Perf.classical,
+      ),
+      initialFen: kInitialFEN,
+      status: GameStatus.started,
+      playerSide: Side.white,
+      opponentSpec: opponent,
+      humanPlayer: const Player(onGame: true),
+      enginePlayer: enginePlayerFor(opponent),
+    ),
+  );
+}
+
+Future<void> resizeOfflineGame(WidgetTester tester, Size size, {bool settle = true}) async {
+  await tester.binding.setSurfaceSize(size);
+  tester.view.physicalSize = size * tester.view.devicePixelRatio;
+  if (settle) {
+    await tester.pumpAndSettle();
+  } else {
+    await tester.pump();
+  }
+}
+
+Future<void> pumpReplayTransition(WidgetTester tester) async {
+  // On Android, the Next button can keep animating throughout replay.
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 500));
+}
+
+(double, double, double) toolbarCutoffs(WidgetTester tester) =>
+    Theme.of(tester.element(find.byType(BottomBar))).platform == TargetPlatform.iOS
+    ? (200.0, 256.0, 368.0)
+    : (160.0, 208.0, 304.0);
+
+BottomBarButton toolbarButton(WidgetTester tester, Finder icon) =>
+    tester.widget<BottomBarButton>(find.ancestor(of: icon, matching: find.byType(BottomBarButton)));
+
+ProviderContainer offlineGameContainer(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(OfflineComputerGameScreen)));
+
+class _ReplayTestEngine({required final bool Function(FakeEngineSession) holdSearch})
+    extends LegalMoveEngine {
+  @override
+  void onGo(FakeEngineSession session, List<String> parts) {
+    if (!holdSearch(session)) super.onGo(session, parts);
+  }
 }
 
 /// Helper to initialize a practice mode game.
@@ -2512,6 +3056,7 @@ Future<Rect> initOfflineComputerGame(
   Variant? variant,
   String? fen,
   Side side = Side.white,
+  BoardPrefs? boardPrefs,
 }) async {
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
@@ -2521,6 +3066,9 @@ Future<Rect> initOfflineComputerGame(
   final app = await makeTestProviderScopeApp(
     tester,
     home: OfflineComputerGameScreen(initialVariant: variant, initialFen: fen),
+    defaultPreferences: {
+      if (boardPrefs != null) PrefCategory.board.storageKey: jsonEncode(boardPrefs.toJson()),
+    },
     overrides: {
       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
         (_) => gameStorage,

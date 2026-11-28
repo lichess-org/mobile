@@ -179,7 +179,9 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Whether the board is currently replaying move history (e.g. analysis navigation).
   ///
-  /// When true, position changes animate and clear the premove (e.g. analysis navigation).
+  /// If the layout owns the controller and the FEN changes during a replay transition, clear the
+  /// premove without executing it and skip any Atomic explosion. Piece animations still follow
+  /// the board settings.
   final bool isReplaying;
 
   /// Called when a premove is ready to be executed after the opponent moves.
@@ -243,7 +245,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
       return;
     }
 
-    if (widget.isReplaying) {
+    if (old.isReplaying || widget.isReplaying) {
       ctrl.updatePosition(newGameData, resetPremove: true);
       return;
     }

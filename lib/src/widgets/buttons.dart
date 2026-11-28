@@ -116,7 +116,7 @@ class _RepeatButtonState() extends State<RepeatButton> {
 
   @override
   void dispose() {
-    _holdTimer?.cancel();
+    _onPressEnd();
     super.dispose();
   }
 
