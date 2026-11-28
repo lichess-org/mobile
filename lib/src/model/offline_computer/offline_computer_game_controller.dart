@@ -281,7 +281,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
   void loadGame(SavedOfflineComputerGame savedGame) {
     _analyser.clear();
     final game = savedGame.game;
-    state = OfflineComputerGameState(game: game, stepCursor: game.steps.length - 1);
+    state = OfflineComputerGameState(game: game);
     _clock.setupClock(
       savedGame.timeIncrement,
       whiteTimeLeft: savedGame.whiteTimeLeft,
@@ -296,7 +296,12 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
   }
 
   void makeMove(Move move) {
-    if (state.isEngineThinking || state.isEvaluatingMove || !state.game.playable) return;
+    if (state.isReplaying ||
+        state.isEngineThinking ||
+        state.isEvaluatingMove ||
+        !state.game.playable) {
+      return;
+    }
 
     if (state.game.practiceMode) {
       _makeMoveWithEvaluation(move);
@@ -326,7 +331,6 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
     state = state.copyWith(
       game: state.game.copyWith(steps: state.game.steps.add(newStep)),
-      stepCursor: state.stepCursor + 1,
       hintMove: null,
       // Whatever the analysis was about to unlock, it was for the position before this move.
       isLoadingHint: false,
@@ -383,7 +387,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
     final sanMove = _applyMove(move);
 
-    final stepCursorAfterMove = state.stepCursor;
+    final playedStepIndex = state.liveStepIndex;
 
     if (!state.game.playable) {
       _analyser.yieldEngine();
@@ -419,7 +423,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
         plyBeforeMove < _kOpeningPlyThreshold) {
       _makeCommentFromOpeningDb(
         sanMove,
-        stepCursor: stepCursorAfterMove,
+        stepIndex: playedStepIndex,
         positionBefore: positionBefore,
         fromPosition: state.currentPosition,
       );
@@ -429,13 +433,14 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     if (matchingPv != null) {
       final comment = _createPracticeComment(
         sanMove: sanMove,
+        positionBeforeMove: positionBefore,
         preMoveEval: preMoveEval,
         winningChancesAfter: matchingPv.winningChances(playerSide),
         evalAfterString: matchingPv.evalString,
         playerSide: playerSide,
       );
 
-      _setComment(stepCursorAfterMove, comment);
+      _setComment(playedStepIndex, comment);
       state = state.copyWith(isEvaluatingMove: false);
 
       if (state.game.playable && state.turn != state.game.playerSide) {
@@ -478,13 +483,14 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
         final comment = _createPracticeComment(
           sanMove: sanMove,
+          positionBeforeMove: positionBefore,
           preMoveEval: preMoveEval,
           winningChancesAfter: -evalAfter.winningChances(playerSide.opposite),
           evalAfterString: evalAfter.evalString,
           playerSide: playerSide,
         );
 
-        _setComment(stepCursorAfterMove, comment);
+        _setComment(playedStepIndex, comment);
       }
 
       state = state.copyWith(isEvaluatingMove: false);
@@ -525,6 +531,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
   /// Creates a practice comment based on pre-move PV data and the post-move eval.
   PracticeComment _createPracticeComment({
     required SanMove sanMove,
+    required Position positionBeforeMove,
     required ClientEval preMoveEval,
     required double winningChancesAfter,
     required String? evalAfterString,
@@ -560,8 +567,6 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
       winningChancesAfter: winningChancesAfter,
     );
 
-    final positionBeforeMove = state.game.stepAt(state.stepCursor - 1).position;
-
     SanMove? bestMoveSan;
     if (!playedMoveIsBest && bestMove != null) {
       if (positionBeforeMove.isLegal(bestMove)) {
@@ -588,14 +593,14 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
   Future<void> _makeCommentFromOpeningDb(
     SanMove sanMove, {
-    required int stepCursor,
+    required int stepIndex,
     required Position positionBefore,
     required Position fromPosition,
   }) async {
     final masterEntry = await _fetchMasterDatabase(positionBefore.fen);
     if (!ref.mounted || masterEntry == null) return;
     if (state.currentPosition != fromPosition) return;
-    final currentComment = state.game.steps[stepCursor].computerAnalysis?.practiceComment;
+    final currentComment = state.game.steps[stepIndex].computerAnalysis?.practiceComment;
     if (currentComment?.isBookMove == true) return;
     final isBookMove = masterEntry.moves.any(
       (m) => m.uci == sanMove.normalizeUci(state.game.meta.variant) && m.games > 1,
@@ -606,10 +611,10 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
         verdict: MoveVerdict.goodMove,
         isBookMove: true,
       );
-      _setComment(stepCursor, updatedComment);
+      _setComment(stepIndex, updatedComment);
     } else {
       _setComment(
-        stepCursor,
+        stepIndex,
         const PracticeComment(verdict: MoveVerdict.goodMove, isBookMove: true),
       );
     }
@@ -723,7 +728,6 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
   void takeback() {
     if (!state.canTakeback) return;
-    if (!state.game.casual && !state.game.practiceMode) return;
 
     _stopThinking();
 
@@ -738,7 +742,6 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
     state = state.copyWith(
       game: state.game.copyWith(steps: finalSteps, isThreefoldRepetition: false),
-      stepCursor: finalSteps.length - 1,
       isEngineThinking: false,
       isEvaluatingMove: false,
       hintMove: null,
@@ -756,29 +759,22 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     }
   }
 
-  void goForward() {
-    if (state.canGoForward) {
-      state = state.copyWith(stepCursor: state.stepCursor + 1);
-    }
+  void cursorAt(int index) {
+    if (index < 0 || index > state.liveStepIndex || index == state.stepCursor) return;
+    state = state.copyWith(replayCursor: index == state.liveStepIndex ? null : index);
   }
 
-  void goBack() {
-    if (state.canGoBack) {
-      state = state.copyWith(stepCursor: state.stepCursor - 1);
-    }
-  }
+  void goForward() => cursorAt(state.stepCursor + 1);
+
+  void goBack() => cursorAt(state.stepCursor - 1);
 
   /// Show or cycle through hints.
   ///
   /// Hints are precomputed when it's the player's turn (in casual or practice mode).
   /// This method just cycles through the available hints.
   void hint() {
-    if (!state.game.casual && !state.game.practiceMode) return;
-    if (!state.game.playable || state.isEngineThinking || state.isLoadingHint) return;
-    if (state.turn != state.game.playerSide) return;
-
     final existingHints = state.hintMoves;
-    if (existingHints == null || existingHints.isEmpty) return;
+    if (existingHints == null) return;
 
     final current = state.hintMove;
     final currentIndex = current != null ? existingHints.indexOf(current) : -1;
@@ -833,6 +829,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 
   /// Toggle showing a suggested move on the board.
   void toggleSuggestedMove(NormalMove? move) {
+    if (state.isReplaying) return;
     if (state.showingSuggestedMove == move) {
       state = state.copyWith(showingSuggestedMove: null);
     } else {
@@ -876,11 +873,11 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
 sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState {
   const factory({
     required OfflineComputerGame game,
-    @Default(0) int stepCursor,
+    int? replayCursor,
     @Default(false) bool isEngineThinking,
     @Default(false) bool isLoadingHint,
 
-    /// The hint move currently shown on the board. Null means no hint is shown yet.
+    /// The selected hint for the live board, or null if none is selected. Hidden during replay.
     @Default(null) Move? hintMove,
 
     /// Whether the engine is evaluating the player's move in practice mode.
@@ -946,8 +943,12 @@ sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState 
     );
   }
 
-  /// The computer analysis for the current step.
-  ComputerAnalysis? get currentAnalysis => game.steps[stepCursor].computerAnalysis;
+  int get liveStepIndex => game.steps.length - 1;
+  int get stepCursor => replayCursor ?? liveStepIndex;
+  bool get isReplaying => replayCursor != null;
+  GameStep get viewedStep => game.steps[stepCursor];
+
+  ComputerAnalysis? get currentAnalysis => game.steps.last.computerAnalysis;
 
   /// The practice comment which can be on the last step or the previous step (after computer played a move).
   PracticeComment? get practiceComment =>
@@ -956,28 +957,33 @@ sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState 
           ? game.steps[game.steps.length - 2].computerAnalysis?.practiceComment
           : null);
 
-  /// The hint moves for the current position.
-  IList<Move>? get hintMoves => currentAnalysis?.hintMoves;
+  IList<Move>? get hintMoves =>
+      !isReplaying &&
+          (game.casual || game.practiceMode) &&
+          game.playable &&
+          !isEngineThinking &&
+          !isLoadingHint &&
+          !isEvaluatingMove &&
+          turn == game.playerSide
+      ? currentAnalysis?.hintMoves
+      : null;
 
-  Position get currentPosition => game.stepAt(stepCursor).position;
+  Position get currentPosition => game.lastPosition;
   Side get turn => currentPosition.turn;
   bool get finished => game.finished;
 
-  Move? get lastMove =>
-      stepCursor > 0 ? Move.parse(game.steps[stepCursor].sanMove!.move.uci) : null;
-
-  MaterialDiffSide? currentMaterialDiff(Side side) {
-    return game.steps[stepCursor].diff?.bySide(side);
-  }
-
   List<String> get moves => game.steps.skip(1).map((e) => e.sanMove!.san).toList(growable: false);
 
-  bool get canGoForward => stepCursor < game.steps.length - 1;
+  bool get canGoForward => stepCursor < liveStepIndex;
   bool get canGoBack => stepCursor > 0;
 
-  /// Player can take back if it's their turn and there are moves to take back.
   bool get canTakeback =>
-      game.playable && game.steps.length > 1 && !isEngineThinking && !isEvaluatingMove;
+      !isReplaying &&
+      (game.casual || game.practiceMode) &&
+      game.playable &&
+      liveStepIndex > 0 &&
+      !isEngineThinking &&
+      !isEvaluatingMove;
 
   /// The square to highlight for the current hint.
   Square? get hintSquare {

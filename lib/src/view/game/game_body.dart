@@ -37,7 +37,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
@@ -1084,14 +1083,10 @@ class const _MoveNavButton({required final GameFullId id, required final bool fo
       final canGoBackward = ref.watch(
         gameControllerProvider(id).select((s) => s.value?.canGoBackward ?? false),
       );
-      return RepeatButton(
-        onLongPress: canGoBackward ? () => _move(ref) : null,
-        child: BottomBarButton(
-          onTap: canGoBackward ? () => _move(ref) : null,
-          label: 'Previous',
-          icon: CupertinoIcons.chevron_back,
-          showTooltip: false,
-        ),
+      return MoveNavigationButton(
+        forward: false,
+        label: 'Previous',
+        onStep: canGoBackward ? () => _move(ref) : null,
       );
     }
 
@@ -1107,15 +1102,11 @@ class const _MoveNavButton({required final GameFullId id, required final bool fo
         );
       }),
     );
-    return RepeatButton(
-      onLongPress: canGoForward ? () => _move(ref) : null,
-      child: BottomBarButton(
-        onTap: canGoForward ? () => _move(ref) : null,
-        label: context.l10n.next,
-        icon: CupertinoIcons.chevron_forward,
-        showTooltip: false,
-        blink: blink,
-      ),
+    return MoveNavigationButton(
+      forward: true,
+      label: context.l10n.next,
+      onStep: canGoForward ? () => _move(ref) : null,
+      blink: blink,
     );
   }
 }

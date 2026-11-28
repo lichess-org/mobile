@@ -50,6 +50,9 @@ class _MoveListState() extends ConsumerState<MoveList> {
   @override
   void didUpdateWidget(covariant MoveList oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentMoveIndex == widget.currentMoveIndex && oldWidget.type == widget.type) {
+      return;
+    }
     _debounce(() {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(

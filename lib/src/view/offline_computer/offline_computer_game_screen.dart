@@ -219,6 +219,8 @@ class _BodyState() extends ConsumerState<_Body> {
     final isBoardFlipped = ref.watch(_isBoardFlippedProvider);
     final orientation = gameState.game.playerSide;
     final isPlayerTurn = gameState.turn == orientation && !gameState.isEngineThinking;
+    final viewedStep = gameState.viewedStep;
+    final lastMove = viewedStep.sanMove?.move;
 
     final blindfoldMode = ref.watch(
       offlineComputerGamePreferencesProvider.select((p) => p.blindfoldMode),
@@ -255,42 +257,147 @@ class _BodyState() extends ConsumerState<_Body> {
                       youAre: orientation,
                       isBoardTurned: isBoardFlipped,
                     ),
-                    explosionSquares: gameState.stepCursor > 0
+                    isReplaying: gameState.isReplaying,
+                    explosionSquares: !gameState.isReplaying && gameState.liveStepIndex > 0
                         ? atomicExplosionSquares(
-                            gameState.game.stepAt(gameState.stepCursor - 1).position,
-                            gameState.lastMove,
+                            gameState.game.stepAt(gameState.liveStepIndex - 1).position,
+                            lastMove,
                           )
                         : null,
-                    shapes: _buildBoardShapes(gameState, boardColorScheme),
+                    shapes: gameState.isReplaying
+                        ? null
+                        : _buildBoardShapes(gameState, boardColorScheme),
                     boardSettingsOverrides: BoardSettingsOverrides(
                       enablePremoves: false,
                       blindfoldMode: blindfoldMode,
                     ),
-                    boardParams: GameBoardParams.interactive(
-                      variant: gameState.game.meta.variant,
-                      position: gameState.currentPosition,
-                      playerSide: gameState.game.finished
-                          ? PlayerSide.none
-                          : isPlayerTurn && !gameState.isEvaluatingMove
-                          ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
-                          : PlayerSide.none,
-                      lastMove: gameState.lastMove,
-                      onMove: (move, {viaDragAndDrop}) {
-                        ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
-                      },
-                    ),
+                    boardParams: gameState.isReplaying
+                        ? GameBoardParams.readonly(
+                            variant: gameState.game.meta.variant,
+                            position: viewedStep.position,
+                            lastMove: lastMove,
+                          )
+                        : GameBoardParams.interactive(
+                            variant: gameState.game.meta.variant,
+                            position: viewedStep.position,
+                            playerSide:
+                                gameState.game.playable &&
+                                    isPlayerTurn &&
+                                    !gameState.isEvaluatingMove
+                                ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
+                                : PlayerSide.none,
+                            lastMove: lastMove,
+                            onMove: (move, {viaDragAndDrop}) => controller.makeMove(move),
+                          ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
-                    userActionsBar: _BottomBar(
-                      onNewGame: () =>
-                          _showNewGameDialog(initialVariant: gameState.game.meta.variant),
-                    ),
+                    onSelectMove: controller.cursorAt,
+                    userActionsBar: _BottomBar(onMenu: _showGameMenu, onResign: _showResignDialog),
                   ),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _showGameMenu({required bool includeNavigation, required bool includeAssists}) {
+    final gameState = ref.read(offlineComputerGameControllerProvider);
+    final controller = ref.read(offlineComputerGameControllerProvider.notifier);
+    final gameId = gameState.game.id;
+
+    VoidCallback forGame(void Function(OfflineComputerGameState) action) => () {
+      if (!mounted) return;
+      final current = ref.read(offlineComputerGameControllerProvider);
+      if (current.game.id == gameId) action(current);
+    };
+
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: forGame((_) => ref.read(_isBoardFlippedProvider.notifier).toggle()),
+        ),
+        if (_canAnalyze(gameState.game))
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed: forGame((current) {
+              if (!_canAnalyze(current.game)) return;
+              Navigator.of(context).push(
+                AnalysisScreen.buildRoute(
+                  AnalysisOptions.pgn(
+                    id: current.game.id,
+                    orientation: current.game.playerSide,
+                    initialMoveCursor: current.stepCursor,
+                    pgn: current.game.makePgn(),
+                    isComputerAnalysisAllowed: true,
+                    variant: current.game.meta.variant,
+                  ),
+                ),
+              );
+            }),
+          ),
+        if (includeNavigation && gameState.canGoBack)
+          BottomSheetAction(
+            makeLabel: (_) => const Text('Previous move'),
+            onPressed: forGame((_) => controller.goBack()),
+          ),
+        if (includeNavigation && gameState.canGoForward)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.next),
+            onPressed: forGame((_) => controller.goForward()),
+          ),
+        if (gameState.isReplaying)
+          BottomSheetAction(
+            makeLabel: (_) => const Text('Return to latest'),
+            onPressed: forGame((current) => controller.cursorAt(current.liveStepIndex)),
+          ),
+        if (includeAssists && gameState.canTakeback)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.takeback),
+            onPressed: forGame((_) => controller.takeback()),
+          ),
+        if (includeAssists && gameState.hintMoves != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.getAHint),
+            onPressed: forGame((_) => controller.hint()),
+          ),
+        if (gameState.game.resignable)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.resign),
+            onPressed: forGame((_) => _showResignDialog()),
+          ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileNewGame),
+          onPressed: forGame(
+            (current) => _showNewGameDialog(initialVariant: current.game.meta.variant),
+          ),
+        ),
+      ],
+    );
+  }
+
+  static bool _canAnalyze(OfflineComputerGame game) =>
+      game.finished || game.casual || game.practiceMode;
+
+  void _showResignDialog() {
+    final game = ref.read(offlineComputerGameControllerProvider).game;
+    if (!game.resignable) return;
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (context) => YesNoDialog(
+        title: Text(context.l10n.resign),
+        content: Text(context.l10n.mobileAreYouSure),
+        onYes: () {
+          Navigator.pop(context);
+          if (mounted && ref.read(offlineComputerGameControllerProvider).game.id == game.id) {
+            ref.read(offlineComputerGameControllerProvider.notifier).resign();
+          }
+        },
+        onNo: () => Navigator.pop(context),
       ),
     );
   }
@@ -342,105 +449,77 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 }
 
-class const _BottomBar({required final VoidCallback onNewGame}) extends ConsumerWidget {
+class const _BottomBar({
+  required final void Function({required bool includeNavigation, required bool includeAssists})
+  onMenu,
+  required final VoidCallback onResign,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(offlineComputerGameControllerProvider);
+    final controller = ref.read(offlineComputerGameControllerProvider.notifier);
 
-    return BottomBar(
-      cupertinoGlass: true,
-      children: [
-        BottomBarButton(
-          label: context.l10n.menu,
-          onTap: () => _showGameMenu(context, ref),
-          icon: Icons.menu,
-        ),
-        BottomBarButton(
-          label: context.l10n.resign,
-          onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
-          icon: CupertinoIcons.flag,
-        ),
-        BottomBarButton(
-          label: context.l10n.takeback,
-          onTap: gameState.canTakeback && (gameState.game.casual || gameState.game.practiceMode)
-              ? () => ref.read(offlineComputerGameControllerProvider.notifier).takeback()
-              : null,
-          icon: CupertinoIcons.arrow_uturn_left,
-        ),
-        BottomBarButton(
-          label: context.l10n.getAHint,
-          onTap: _canGetHint(gameState)
-              ? () => ref.read(offlineComputerGameControllerProvider.notifier).hint()
-              : null,
-          icon: CupertinoIcons.lightbulb,
-          highlighted: gameState.hintSquare != null,
-        ),
-      ],
-    );
-  }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final showNavigation =
+            width >= BottomBar.widthForIconButtons(context, icons: 1, navigation: true);
+        final showResign =
+            width >= BottomBar.widthForIconButtons(context, icons: 2, navigation: true);
+        final showAssists =
+            width >= BottomBar.widthForIconButtons(context, icons: 4, navigation: true);
 
-  Future<void> _showGameMenu(BuildContext context, WidgetRef ref) {
-    final gameState = ref.read(offlineComputerGameControllerProvider);
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: () {
-            ref.read(_isBoardFlippedProvider.notifier).toggle();
-          },
-        ),
-        if (gameState.game.finished || gameState.game.casual || gameState.game.practiceMode)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () => Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: gameState.game.id,
-                  orientation: gameState.game.playerSide,
-                  initialMoveCursor: gameState.stepCursor,
-                  pgn: gameState.game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: gameState.game.meta.variant,
-                ),
-              ),
+        return BottomBar(
+          cupertinoGlass: true,
+          children: [
+            BottomBarButton(
+              label: context.l10n.menu,
+              onTap: () => onMenu(includeNavigation: !showNavigation, includeAssists: !showAssists),
+              icon: Icons.menu,
             ),
-          ),
-        if (gameState.game.resignable)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.resign),
-            onPressed: () => _showResignDialog(context, ref),
-          ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileNewGame),
-          onPressed: onNewGame,
-        ),
-      ],
+            if (showResign)
+              BottomBarButton(
+                label: context.l10n.resign,
+                onTap: gameState.game.resignable ? onResign : null,
+                icon: CupertinoIcons.flag,
+              ),
+            if (showAssists) ...[
+              BottomBarButton(
+                label: context.l10n.takeback,
+                onTap: gameState.canTakeback ? controller.takeback : null,
+                icon: CupertinoIcons.arrow_uturn_left,
+              ),
+              BottomBarButton(
+                label: context.l10n.getAHint,
+                onTap: gameState.hintMoves != null ? controller.hint : null,
+                icon: CupertinoIcons.lightbulb,
+                highlighted: !gameState.isReplaying && gameState.hintSquare != null,
+              ),
+            ],
+            if (showNavigation)
+              BottomBarGroup(
+                navigation: true,
+                children: [
+                  MoveNavigationButton(
+                    forward: false,
+                    label: 'Previous move',
+                    onStep: gameState.canGoBack ? controller.goBack : null,
+                  ),
+                  MoveNavigationButton(
+                    forward: true,
+                    label: context.l10n.next,
+                    onStep: gameState.canGoForward ? controller.goForward : null,
+                    blink:
+                        gameState.isReplaying &&
+                        gameState.game.playable &&
+                        gameState.turn == gameState.game.playerSide,
+                  ),
+                ],
+              ),
+          ],
+        );
+      },
     );
-  }
-
-  void _showResignDialog(BuildContext context, WidgetRef ref) {
-    showAdaptiveDialog<void>(
-      context: context,
-      builder: (context) => YesNoDialog(
-        title: Text(context.l10n.resign),
-        content: Text(context.l10n.mobileAreYouSure),
-        onYes: () {
-          Navigator.pop(context);
-          ref.read(offlineComputerGameControllerProvider.notifier).resign();
-        },
-        onNo: () => Navigator.pop(context),
-      ),
-    );
-  }
-
-  bool _canGetHint(OfflineComputerGameState gameState) {
-    return (gameState.game.casual || gameState.game.practiceMode) &&
-        gameState.game.playable &&
-        !gameState.isEngineThinking &&
-        !gameState.isLoadingHint &&
-        !gameState.isEvaluatingMove &&
-        gameState.turn == gameState.game.playerSide;
   }
 }
 
@@ -468,7 +547,7 @@ class const _Player({required final Side side}) extends ConsumerWidget {
     final game = gameState.game;
     final isEngine = side != game.playerSide;
     final materialDiff = boardPreferences.materialDifferenceFormat.visible
-        ? gameState.currentMaterialDiff(side)
+        ? gameState.viewedStep.diff?.bySide(side)
         : null;
 
     final isShortScreen = isShortVerticalScreen(context);
@@ -513,7 +592,7 @@ class const _Player({required final Side side}) extends ConsumerWidget {
       );
     }
 
-    final practiceStatusLabel = !game.practiceMode
+    final practiceStatusLabel = !game.practiceMode || gameState.isReplaying
         ? null
         : gameState.isEvaluatingMove
         ? context.l10n.evaluatingYourMove
@@ -528,24 +607,31 @@ class const _Player({required final Side side}) extends ConsumerWidget {
       mainAxisAlignment: .center,
       mainAxisSize: .min,
       children: [
-        if (game.practiceMode) ...[
-          Padding(
-            padding: isShortScreen
-                ? const EdgeInsets.only(bottom: 4.0)
-                : const EdgeInsets.only(bottom: 8),
-            child: Text(
-              practiceStatusLabel ?? '',
-              style: TextStyle(
-                fontSize: isShortScreen ? 11 : null,
-                fontStyle: FontStyle.italic,
-                color: textShade(context, 0.8),
-                height: isShortScreen ? 1.0 : null,
-              ),
+        if (game.practiceMode)
+          Visibility(
+            visible: !gameState.isReplaying,
+            maintainState: true,
+            child: Column(
+              crossAxisAlignment: .stretch,
+              mainAxisSize: .min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: isShortScreen ? 4.0 : 8.0),
+                  child: Text(
+                    practiceStatusLabel ?? '',
+                    style: TextStyle(
+                      fontSize: isShortScreen ? 11 : null,
+                      fontStyle: FontStyle.italic,
+                      color: textShade(context, 0.8),
+                      height: isShortScreen ? 1.0 : null,
+                    ),
+                  ),
+                ),
+                _PracticeCommentCard(key: ValueKey(game.id), gameState: gameState),
+                SizedBox(height: isShortScreen ? 4.0 : 8.0),
+              ],
             ),
           ),
-          _PracticeCommentCard(gameState: gameState),
-          SizedBox(height: isShortScreen ? 4.0 : 8.0),
-        ],
         Row(
           mainAxisSize: .max,
           mainAxisAlignment: .start,
@@ -586,7 +672,7 @@ class const _PlayerClock({required final Side side, required final Key clockKey}
   }
 }
 
-class const _PracticeCommentCard({required final OfflineComputerGameState gameState})
+class const _PracticeCommentCard({required final OfflineComputerGameState gameState, super.key})
     extends ConsumerStatefulWidget {
   @override
   ConsumerState<_PracticeCommentCard> createState() => _PracticeCommentCardState();
@@ -1242,6 +1328,7 @@ class const OfflineComputerGameResultDialog({
               AnalysisOptions.pgn(
                 id: game.id,
                 orientation: game.playerSide,
+                initialMoveCursor: game.steps.length - 1,
                 pgn: game.makePgn(),
                 isComputerAnalysisAllowed: true,
                 variant: game.meta.variant,

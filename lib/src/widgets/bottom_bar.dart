@@ -1,11 +1,16 @@
 import 'dart:math' as math;
 
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:flutter/rendering.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassButton, GlassScrollEdgeEffect, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
+
+const double _kBarHorizontalPadding = 8.0;
+const double _kGlassGroupHorizontalPadding = 4.0;
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
 ///
@@ -49,6 +54,28 @@ class BottomBar extends StatelessWidget {
       ? _kGlassBarTopPadding + _kGlassCapsuleHeight + _glassBarBottomPadding(context)
       : kBottomBarHeight + MediaQuery.paddingOf(context).bottom;
 
+  /// Width budget for a glass-enabled bar with [icons] standalone icon-only buttons and an
+  /// optional Previous/Next pair. Includes horizontal safe-area insets, padding, and glass gaps.
+  /// Flat mode budgets [kMinInteractiveDimension] per button.
+  static double widthForIconButtons(
+    BuildContext context, {
+    required int icons,
+    bool navigation = false,
+  }) {
+    final insets = MediaQuery.paddingOf(context).horizontal + 2 * _kBarHorizontalPadding;
+    if (!useLiquidGlass(context)) {
+      return insets + (icons + (navigation ? 2 : 0)) * kMinInteractiveDimension;
+    }
+    final groupWidth = navigation
+        ? 2 * (_kGlassNavigationSlotWidth + _kGlassGroupHorizontalPadding)
+        : 0.0;
+    final gaps = math.max(0, icons + (navigation ? 1 : 0) - 1);
+    return insets +
+        icons * _kGlassIconButtonWidth +
+        groupWidth +
+        gaps * _RenderGlassBarRow._minSpacing;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -65,9 +92,9 @@ class BottomBar extends StatelessWidget {
               child: _GlassBottomBarScope(
                 child: _GlassBarRow(
                   padding: EdgeInsets.fromLTRB(
-                    8.0,
+                    _kBarHorizontalPadding,
                     _kGlassBarTopPadding,
-                    8.0,
+                    _kBarHorizontalPadding,
                     _glassBarBottomPadding(context),
                   ),
                   children: children,
@@ -79,7 +106,7 @@ class BottomBar extends StatelessWidget {
             color: isIOS && cupertinoGlass ? Colors.transparent : null,
             elevation: isIOS && cupertinoGlass ? 0.0 : null,
             height: kBottomBarHeight,
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            padding: const EdgeInsets.symmetric(horizontal: _kBarHorizontalPadding, vertical: 4.0),
             child: Row(
               mainAxisAlignment: mainAxisAlignment,
               children: expandChildren
@@ -347,7 +374,7 @@ class const BottomBarGroup({
     return _GlassBottomBarCapsule(
       onTap: () {},
       group: true,
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: _kGlassGroupHorizontalPadding),
       child: _GlassBottomBarGroupScope(
         navigation: navigation,
         child: SizedBox(
@@ -583,6 +610,7 @@ class const BottomBarButton({
         enabled: enabled,
         button: true,
         label: label,
+        onTap: onTap,
         excludeSemantics: true,
         child: group != null
             // The group's capsule is the button's background.
@@ -649,6 +677,7 @@ class const BottomBarButton({
       enabled: enabled,
       button: true,
       label: label,
+      onTap: onTap,
       excludeSemantics: true,
       child: Tooltip(
         excludeFromSemantics: true,
@@ -661,6 +690,28 @@ class const BottomBarButton({
               ? _AnimatedInvertBackground(color: primary.withValues(alpha: 0.2), child: child)
               : child,
         ),
+      ),
+    );
+  }
+}
+
+class const MoveNavigationButton({
+  required final bool forward,
+  required final String label,
+  required final VoidCallback? onStep,
+  final bool blink = false,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RepeatButton(
+      onLongPress: onStep,
+      child: BottomBarButton(
+        icon: forward ? CupertinoIcons.chevron_forward : CupertinoIcons.chevron_back,
+        label: label,
+        onTap: onStep,
+        showTooltip: false,
+        blink: blink,
       ),
     );
   }
