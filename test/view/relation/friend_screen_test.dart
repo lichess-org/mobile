@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -312,6 +313,87 @@ void main() {
       await chooseSort('Last Seen');
       verifySortOrder(lastSeen);
     });
+
+    testWidgets('swiping right from a following row goes back to the online tab on Android', (
+      tester,
+    ) async {
+      final followingBody = [
+        for (var i = 0; i < 6; i++)
+          '{"id":"user$i","username":"User$i","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}',
+      ].join('\n');
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/rel/following') {
+          return mockResponse(followingBody, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const FriendScreen(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+            () => _MockOnlineFriends(const IList.empty()),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      int tabIndex() => tester.widget<TabBar>(find.byType(TabBar)).controller!.index;
+
+      expect(tabIndex(), 0);
+      await tester.drag(find.byType(TabBarView), const Offset(-300, 0));
+      await tester.pumpAndSettle();
+      expect(tabIndex(), 1, reason: 'swiped to the following tab');
+
+      // The middle of the screen is on a row, which must not swallow the page swipe.
+      await tester.drag(find.byType(SwipeActions).at(2), const Offset(300, 0));
+      await tester.pumpAndSettle();
+      expect(tabIndex(), 0, reason: 'swiped back from a following row');
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
+
+    testWidgets('swiping a following row still reveals unfollow on Android', (tester) async {
+      final followingBody = [
+        for (var i = 0; i < 6; i++)
+          '{"id":"user$i","username":"User$i","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}',
+      ].join('\n');
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/rel/following') {
+          return mockResponse(followingBody, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const FriendScreen(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+            () => _MockOnlineFriends(const IList.empty()),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('6 following'));
+      await tester.pumpAndSettle();
+
+      await tester.drag(find.byType(SwipeActions).at(2), const Offset(-150, 0));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Unfollow'), findsOneWidget);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
   });
 }
 
